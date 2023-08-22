@@ -1,5 +1,4 @@
 import cv2
-from utils import math_utils
 from numpy import ndarray
 
 def ORB_detector(img1: cv2.Mat | ndarray, img2: cv2.Mat | ndarray, nfeatures: int=1000, debug: bool=False):

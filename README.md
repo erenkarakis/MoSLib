@@ -1,1 +1,1 @@
-Monocular-Streo SLAM Lib.
+Monocular-Stereo Scanning SLAM Lib.
