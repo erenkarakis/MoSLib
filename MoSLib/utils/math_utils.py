@@ -55,7 +55,7 @@ def calculate_depth_factor(px_length: int, cam_view_angle: float) -> float:
     depth_factor = (px_length / 2) / tan(radians(half_view_angle))
     return depth_factor
 
-def calculate_point_angle(depth_factor: float, cam_wh: tuple, pt_coordinate: tuple, orientation: bool=0) -> float:
+def calculate_point_angle(depth_factor: float, cam_wh: tuple[int, int], pt_coordinate: tuple, orientation: bool=0) -> float:
     """
     For calculating depth factor for camera. Other calculations depends on depth factor.\n
     So if there is a miscalculation on depth measurement check depth factor or manueally tune it.
