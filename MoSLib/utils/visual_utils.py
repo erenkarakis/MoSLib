@@ -103,7 +103,7 @@ def fps_counter(img: cv2.Mat | np.ndarray, cTime: float, pTime: float, fps_txt_p
     
     ### Parameters
         `img: cv2.Mat | np.ndarray`:
-            img Image/Frame.
+            Image/Frame.
         `cTime: float`:
             Current time.
         `pTime: float`:
@@ -119,3 +119,33 @@ def fps_counter(img: cv2.Mat | np.ndarray, cTime: float, pTime: float, fps_txt_p
 
     fps = int(1/(cTime-pTime))
     cv2.putText(img, f"FPS: {fps}", fps_txt_pt, cv2.FONT_HERSHEY_PLAIN, 2, txt_color, 2)
+
+def show_camera_center(img: cv2.Mat | np.ndarray, color: tuple[int, int, int]=(255, 0, 0), line_thickness: int=2, circle_raidus: int=30) -> None:
+    """
+    Draws a cross and circle to center of the screen.
+    
+    ### Parameters
+        `img: cv2.Mat | np.ndarray`:
+            Image/Frame.
+        `color: tuple[int, int, int]`:
+            Color of the cross and circle.
+        `line_thickness: int`:
+            Thickness of the cross lines
+        
+    
+    ### Returns
+        Class names list with class colors.
+    """
+
+    height, width, channels = img.shape
+    half_width = int(width / 2)
+    half_heigth = int(height / 2)
+
+    # Horizontal line
+    cv2.line(img, (0, half_heigth), (width, half_heigth), color, line_thickness)
+
+    # Vertical line
+    cv2.line(img, (half_width, 0), (half_width, height), color, line_thickness)
+
+    # Center circle
+    cv2.circle(img, (half_width, half_heigth), circle_raidus, color, line_thickness)
