@@ -3,17 +3,59 @@ import cv2
 from numpy import ndarray
 
 
-def find_distance_px(pt1, pt2) -> float:
+def find_distance_px(pt1: tuple[int, int], pt2: tuple[int, int]) -> float:
+    """
+    Calculates the pixel distance between given points in the frame.
+    
+    ### Parameters
+        `pt1: tuple[int, int]`:
+            First point.
+        `pt2: tuple[int, int]`:
+            Second point.
+    
+    ### Returns
+        Distance between given points.
+    """
+
     return sqrt((pt1[0] - pt2[0])**2 + (pt1[1] - pt2[1])**2)
 
-def calculate_focal_legth(widthInCm, distanceFromCam, widthInPixels) -> float:
+def calculate_focal_length(widthInCm: float, distanceFromCam: float, widthInPixels: int) -> float:
+    """
+    This function is for calibration. You need to run this for learn focal length\n
+    of your camera.
+    
+    ### Parameters
+        `widthInCm: float`:
+            The size of the object to be measured.
+        `distanceFromCam: float`:
+            Distance to the object to be measured.
+        `widthInPixels: float`:
+            The pixel size of the object to be measured in the frame/image.
+    
+    ### Returns
+        Focal length of your camera.
+    """
     
     focalLength = ((widthInPixels * distanceFromCam) / widthInCm)
     return focalLength
 
-def calculate_distance_monocular(focalLenth, widthInCm, widthInPixels) -> float:
+def calculate_distance_monocular(focalLength: float, widthInCm: float, widthInPixels: int) -> float:
+    """
+    Calculates the depth information to given point and returns x, y, z data.
+    
+    ### Parameters
+        `focalLength: float`:
+            Focal length you calculated earlier.
+        `widthInCm: float`:
+            The size of the object to be measured.
+        `widthInPixels: float`:
+            The pixel size of the object to be measured in the frame/image.
+    
+    ### Returns
+        Distance information about given point.
+    """
 
-    distance = ((widthInCm * focalLenth) / widthInPixels)
+    distance = ((widthInCm * focalLength) / widthInPixels)
     return distance
 
 def triangulate_streo(img_left: cv2.Mat | ndarray, img_right: cv2.Mat | ndarray, c2c_distance: float) -> float:
