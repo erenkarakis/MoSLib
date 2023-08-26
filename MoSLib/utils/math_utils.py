@@ -58,21 +58,25 @@ def calculate_distance_monocular(focalLength: float, widthInCm: float, widthInPi
     distance = ((widthInCm * focalLength) / widthInPixels)
     return distance
 
-def triangulate_streo(img_left: cv2.Mat | ndarray, img_right: cv2.Mat | ndarray, c2c_distance: float) -> float:
+def triangulate_streo(left_cam_pt_angle: float, right_cam_pt_angle: float, c2c_distance: float) -> float:
     """
     Calculates the depth information to given point and returns x, y, z data.
     
     ### Parameters
-        `img_left: cv2.Mat | ndarray`:
-            Left frame/image of the streo cam.
-        `img_right: cv2.Mat | ndarray`:
-            Right frame/image of the streo cam.
+        `left_cam_pt_angle: float`:
+            Left camera to point angle.
+        `right_cam_pt_angle: float`:
+            Right camera to point angle.
         `c2c_distance: float`:
-            Distance betwwen two cameras.
+            Distance between two camera.
     
     ### Returns
         Depth information about given point.
     """
+
+    depth = (c2c_distance * tan(left_cam_pt_angle) * tan(right_cam_pt_angle)) / (tan(left_cam_pt_angle) + tan(right_cam_pt_angle))
+    return abs(depth)
+
 
 def calculate_depth_factor(px_length: int, cam_view_angle: float) -> float:
     """
@@ -99,8 +103,8 @@ def calculate_depth_factor(px_length: int, cam_view_angle: float) -> float:
 
 def calculate_point_angle(depth_factor: float, cam_wh: tuple[int, int], pt_coordinate: tuple, orientation: bool=0) -> float:
     """
-    For calculating depth factor for camera. Other calculations depends on depth factor.\n
-    So if there is a miscalculation on depth measurement check depth factor or manueally tune it.
+    For calculating angle to given point. This is a very important function for triangulation.\n
+    Apply for each camera.
 
     ### !! IMPORTANT !!
         You must calculate separately for vertical and horizontal. So you need vertical\n
