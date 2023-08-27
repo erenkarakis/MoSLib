@@ -6,26 +6,20 @@ vertical_angle = 64.0
 horizontal_angle = 78.0
 c2c_distance = 5 + 15/16
 
-depth_factor_h = MoSLib.math_utils.calculate_depth_factor(1382, horizontal_angle)
-depth_factor_v = MoSLib.math_utils.calculate_depth_factor(512, vertical_angle)
+depth_factors = MoSLib.math_utils.depth_factors((911, 686), horizontal_angle, vertical_angle)
+print(depth_factors)
 
-point_angle_r_h = MoSLib.math_utils.calculate_point_angle(depth_factor_h, (1382, 512), (1101, 130), 0)
-point_angle_r_v = MoSLib.math_utils.calculate_point_angle(depth_factor_v, (1382, 512), (1101, 130), 1)
+point_angles_l = MoSLib.math_utils.point_angles((911, 686), depth_factors[0], depth_factors[1], (797, 509)) # 509 
+point_angles_r = MoSLib.math_utils.point_angles((911, 686), depth_factors[0], depth_factors[1], (536, 509)) # 482
 
-point_angle_l_h = MoSLib.math_utils.calculate_point_angle(depth_factor_h, (1382, 512), (1137, 161), 0)
-point_angle_l_v = MoSLib.math_utils.calculate_point_angle(depth_factor_v, (1382, 512), (1137, 161), 1)
+output = MoSLib.triangulate_streo(point_angles_l, point_angles_r, c2c_distance)
 
+print(output)
 
-img_l = cv2.imread("Images/kitti_left.png")
-img_r = cv2.imread("Images/kitti_right.png")
-
-depth_h = MoSLib.math_utils.triangulate_streo(point_angle_l_h, point_angle_r_h, c2c_distance)
-depth_v = MoSLib.math_utils.triangulate_streo(point_angle_l_v, point_angle_r_v, c2c_distance)
-
+img_l = cv2.imread("Images/l2.png")
+img_r = cv2.imread("Images/r2.png")
+MoSLib.visual_utils.show_camera_center(img_l)
 
 cv2.imshow("Img Left", img_l)
 cv2.imshow("Img Right", img_r)
 cv2.waitKey(0)
-
-def distance_from_origin(*coordinates):
-    return math.sqrt(sum([x**2 for x in coordinates]))
