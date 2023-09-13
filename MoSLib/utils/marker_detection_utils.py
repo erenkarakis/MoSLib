@@ -3,7 +3,7 @@ import cv2
 import cv2.aruco as aruco
 
 aruco_size = 5 # For 5X5 aruco detection.
-aruco_dict_param = f"aruco.DICT_{aruco_size}X{aruco_size}_250" # If you need fewer markers, use a smaller dictionary (50, 100, 250, 1000)
+aruco_dict_param = f"aruco.DICT_{aruco_size}X{aruco_size}_250" # If you need fewer markers, use a smaller dictionary. (50, 100, 250, 1000)
 
 cap = cv2.VideoCapture(0) # Get camera source
 
