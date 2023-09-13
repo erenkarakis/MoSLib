@@ -76,8 +76,6 @@ def coordinate_2d(left_cam_pt_angle: float, right_cam_pt_angle: float, c2c_dista
         left_cam_pt_angle = radians(left_cam_pt_angle)
         right_cam_pt_angle = radians(right_cam_pt_angle)
 
-    print("B", left_cam_pt_angle, right_cam_pt_angle)
-
     left_tan = tan(left_cam_pt_angle)
     right_tan = tan(right_cam_pt_angle)
 
@@ -133,3 +131,9 @@ def point_angles(cam_wh: tuple[int, int], xDepthFactor: float, yDepthFactor: flo
     y_degree = degrees(atan(y_tan))
 
     return x_degree, y_degree # Returned value is from half angle of camera to right or left
+
+
+def perspective_projection(rcam_pt: tuple[int, int], lcam_pt: tuple[int, int], fx: float, fy: float, c2c_distance: float, pixel_density: float, focal_length: float, home_point: tuple[int, int]):
+    pass
+    #x = ((b * (lcam_pt[0] - home_point[0]) / ))
+    
