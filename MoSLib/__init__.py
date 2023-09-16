@@ -1,4 +1,4 @@
-from .MoSLib import (ORB_detector, find_disparity, perspective_projection)
+from .MoSLib import (ORB_detector, perspective_projection, depth_map)
 
 from .utils import (math_utils, visual_utils)
 

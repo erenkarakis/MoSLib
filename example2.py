@@ -71,23 +71,26 @@ def load_stereo_coefficients(path):
     cv_file.release()
     return [K1, D1, K2, D2, R, T, E, F, R1, R2, P1, P2, Q]
 
-parser = argparse.ArgumentParser(description='Camera calibration')
-parser.add_argument('--calibration_file', type=str, required=True, help='Path to the stereo calibration file')
-parser.add_argument('--left_source', type=str, required=True, help='Left video or v4l2 device name')
-parser.add_argument('--right_source', type=str, required=True, help='Right video or v4l2 device name')
-parser.add_argument('--is_real_time', type=int, required=True, help='Is it camera stream or video')
 
-args = parser.parse_args()
+def coords_mouse_disp(event,x,y,flags,param):
+    if event == cv2.EVENT_LBUTTONDBLCLK:
+        #print x,y,disp[y,x],filteredImg[y,x]
+        average=0
+        for u in range (-1,2):
+            for v in range (-1,2):
+                average += disp[y+u,x+v]
+        average=average/9
+        Distance= average**(3) + average**(2) - average
+        Distance= np.around(Distance*0.01,decimals=2)
+        print('Distance: '+ str(Distance)+' m')
 
-# is camera stream or video
-if args.is_real_time:
-    cap_left = cv2.VideoCapture(args.left_source, cv2.CAP_V4L2)
-    cap_right = cv2.VideoCapture(args.right_source, cv2.CAP_V4L2)
-else:
-    cap_left = cv2.VideoCapture(args.left_source)
-    cap_right = cv2.VideoCapture(args.right_source)
+cap_left = cv2.VideoCapture()
+cap_right = cv2.VideoCapture()
 
-K1, D1, K2, D2, R, T, E, F, R1, R2, P1, P2, Q = load_stereo_coefficients(args.calibration_file)  # Get cams params
+cap_right.open("/dev/v4l/by-id/usb-046d_081b_A625B8D0-video-index0")
+cap_left.open("/dev/v4l/by-id/usb-046d_081b_852B89E0-video-index0")
+
+K1, D1, K2, D2, R, T, E, F, R1, R2, P1, P2, Q = load_stereo_coefficients("MoSLib/utils/calibrate/stereo_calibration.xml")  # Get cams params
 
 if not cap_left.isOpened() and not cap_right.isOpened():  # If we can't get images from both sources, error
     print("Can't opened the streams!")
@@ -120,12 +123,15 @@ while True:  # Loop until 'q' pressed or stream ends
     gray_left = cv2.cvtColor(left_rectified, cv2.COLOR_BGR2GRAY)
     gray_right = cv2.cvtColor(right_rectified, cv2.COLOR_BGR2GRAY)
 
-    disparity_image = MoSLib.depth_map(gray_left, gray_right)  # Get the disparity map
+    disparity_image, disp= MoSLib.depth_map(gray_left, gray_right)  # Get the disparity map
+    filt_Color= cv2.applyColorMap(disparity_image,cv2.COLORMAP_OCEAN)
 
     # Show the images
     cv2.imshow('left(R)', leftFrame)
     cv2.imshow('right(R)', rightFrame)
-    cv2.imshow('Disparity', disparity_image)
+    cv2.imshow('Disparity', filt_Color)
+
+    cv2.setMouseCallback("Disparity",coords_mouse_disp, filt_Color)
 
     if cv2.waitKey(1) & 0xFF == ord('q'):  # Get key to stop stream. Press q for exit
         break

@@ -105,23 +105,5 @@ def load_image_points(left_dir, left_prefix, right_dir, right_prefix, image_form
 
 
 if __name__ == '__main__':
-    # Check the help parameters to understand arguments
-    parser = argparse.ArgumentParser(description='Camera calibration')
-    parser.add_argument('--left_file', type=str, required=True, help='left matrix file')
-    parser.add_argument('--right_file', type=str, required=True, help='right matrix file')
-    parser.add_argument('--left_prefix', type=str, required=True, help='left image prefix')
-    parser.add_argument('--right_prefix', type=str, required=True, help='right image prefix')
-    parser.add_argument('--left_dir', type=str, required=True, help='left images directory path')
-    parser.add_argument('--right_dir', type=str, required=True, help='right images directory path')
-    parser.add_argument('--image_format', type=str, required=True, help='image format, png/jpg')
-    parser.add_argument('--width', type=int, required=False, help='chessboard width size, default is 9')
-    parser.add_argument('--height', type=int, required=False, help='chessboard height size, default is 6')
-    parser.add_argument('--square_size', type=float, required=False, help='chessboard square size')
-    parser.add_argument('--save_file', type=str, required=True, help='YML file to save stereo calibration matrices')
-
-    args = parser.parse_args()
-    # If chessboard pattern is different, we will pass them as arguments.
-    if args.width is None and args.height is None:
-        stereo_calibrate(args.left_file, args.right_file, args.left_dir, args.left_prefix, args.right_dir, args.right_prefix, args.image_format, args.save_file, args.square_size)
-    else:
-        stereo_calibrate(args.left_file, args.right_file, args.left_dir, args.left_prefix, args.right_dir, args.right_prefix, args.image_format, args.save_file, args.square_size, args.width, args.height)
+    
+    stereo_calibrate("calibrate/left/left.xml", "calibrate/right/right.xml", "calibrate/left", "calib", "calibrate/right", "calib", "png", "calibrate/stereo_calibration.xml", 0.0252, 9, 6)
