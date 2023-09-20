@@ -50,12 +50,13 @@ def calibrate(dirpath, prefix, image_format, square_size, width=9, height=6):
 
     return ret, mtx, dist, rvecs, tvecs
 
-cam = "right" # left or right
+cam1 = "right"
+cam = "left" # left or right
 
-ret, mtx, dist, rvecs, tvecs = calibrate(f"images/{cam}", f"{cam}", "png", 0.0252, 9 ,6)
+ret, mtx, dist, rvecs, tvecs = calibrate(f"images/{cam1}", f"{cam1}", "png", 0.0252, 9 ,6)
 
 for i in range(0, 27): # 0 to number of images
-    img = cv2.imread(f'images/{cam}/{cam}{i}.png')
+    img = cv2.imread(f'images/{cam1}/{cam1}{i}.png')
     h, w = img.shape[:2]
     newcameramtx, roi = cv2.getOptimalNewCameraMatrix(mtx, dist, (w,h), 1, (w,h))
 
@@ -64,6 +65,6 @@ for i in range(0, 27): # 0 to number of images
     # crop the image
     x, y, w, h = roi
     dst = dst[y:y+h, x:x+w]
-    cv2.imwrite(f'calibrate/{cam}/calib{i}.png', dst)
+    cv2.imwrite(f'calibrate/{cam1}/calib{i}.png', dst)
 
-#save_coefficients(mtx, dist, f"calibrate/{cam}/{cam}.xml")
+save_coefficients(mtx, dist, f"calibrate/{cam}/{cam}.xml")
